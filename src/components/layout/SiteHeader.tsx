@@ -9,10 +9,13 @@ interface SiteHeaderProps {
   readonly menuOpen: boolean;
   readonly scrolled: boolean;
   readonly theme: Theme;
+  readonly catalogHref?: string;
+  readonly homeHref?: string;
+  readonly isCatalogPage?: boolean;
   readonly onLanguageToggle: () => void;
   readonly onMenuClose: () => void;
   readonly onMenuToggle: () => void;
-  readonly onThemeToggle: () => void;
+  readonly onThemeToggle: (origin: HTMLButtonElement) => void;
 }
 
 export default function SiteHeader({
@@ -22,20 +25,28 @@ export default function SiteHeader({
   menuOpen,
   scrolled,
   theme,
+  catalogHref = "#goi-dich-vu",
+  homeHref = "#trang-chu",
+  isCatalogPage = false,
   onLanguageToggle,
   onMenuClose,
   onMenuToggle,
   onThemeToggle,
 }: SiteHeaderProps) {
+  const hrefFor = (id: string) => {
+    if (id === "san-pham") return catalogHref;
+    return isCatalogPage ? `${homeHref}#${id}` : `#${id}`;
+  };
+
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
-      <a className="brand" href="#trang-chu" aria-label="TrumShop" onClick={onMenuClose}>
+      <a className="brand" href={homeHref} aria-label="TrumShop" onClick={onMenuClose}>
         <span className="brand-mark">T</span>
         <span>TrumShop</span>
       </a>
       <nav className="desktop-nav" aria-label={language === "vi" ? "Điều hướng chính" : "Main navigation"}>
         {content.nav.map(([id, label]) => (
-          <a className={activeSection === id ? "active" : ""} href={`#${id}`} key={id}>{label}</a>
+          <a className={activeSection === id || (id === "san-pham" && activeSection === "san-pham-noi-bat") ? "active" : ""} href={hrefFor(id)} key={id}>{label}</a>
         ))}
       </nav>
       <div className="header-tools">
@@ -44,7 +55,7 @@ export default function SiteHeader({
           type="button"
           aria-label={theme === "dark" ? content.themeLight : content.themeDark}
           title={theme === "dark" ? content.themeLight : content.themeDark}
-          onClick={onThemeToggle}
+          onClick={(event) => onThemeToggle(event.currentTarget)}
         >
           <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
           <small>{theme === "dark" ? "Light" : "Dark"}</small>
@@ -59,7 +70,7 @@ export default function SiteHeader({
           <strong>{language.toUpperCase()}</strong>
         </button>
       </div>
-      <a className="button button-small button-ghost header-cta" href="#lien-he">{content.contact} <span>↗</span></a>
+      <a className="button button-small button-ghost header-cta" href={isCatalogPage ? `${homeHref}#lien-he` : "#lien-he"}>{content.contact} <span>↗</span></a>
       <button
         className={`menu-toggle ${menuOpen ? "open" : ""}`}
         type="button"
@@ -71,9 +82,9 @@ export default function SiteHeader({
       </button>
       <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
         {content.nav.map(([id, label]) => (
-          <a href={`#${id}`} key={id} onClick={onMenuClose}>{label}</a>
+          <a href={hrefFor(id)} key={id} onClick={onMenuClose}>{label}</a>
         ))}
-        <a href="#lien-he" onClick={onMenuClose}>{content.contact} <span>↗</span></a>
+        <a href={isCatalogPage ? `${homeHref}#lien-he` : "#lien-he"} onClick={onMenuClose}>{content.contact} <span>↗</span></a>
       </div>
     </header>
   );

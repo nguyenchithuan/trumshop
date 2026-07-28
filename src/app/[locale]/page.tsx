@@ -7,16 +7,16 @@ type LocalePageProps = { readonly params: Promise<{ readonly locale: string }> }
 
 const metadataByLocale: Record<Locale, Metadata> = {
   vi: {
-    title: "Nâng cấp ChatGPT Go, Plus, Pro 1 tháng | TrumShop",
-    description: "Tư vấn đăng ký ChatGPT Go, Plus và Pro theo tháng. Nhiều lựa chọn bảo hành, hỗ trợ trực tiếp qua Zalo, Facebook và Instagram.",
+    title: "Công cụ AI & tiện ích số | TrumShop",
+    description: "Khám phá ChatGPT, Gemini, Kling AI, OpenArt, CapCut Pro và nhiều tiện ích số với tư vấn trực tiếp từ TrumShop.",
     alternates: { canonical: "/vi", languages: { vi: "/vi", en: "/en" } },
-    openGraph: { locale: "vi_VN", url: "/vi", title: "Nâng cấp ChatGPT Go, Plus, Pro theo tháng | TrumShop", description: "Chọn gói phù hợp, lựa chọn bảo hành linh hoạt và liên hệ TrumShop để được tư vấn trực tiếp." },
+    openGraph: { locale: "vi_VN", url: "/vi", title: "Công cụ AI & tiện ích số | TrumShop", description: "Khám phá công cụ phù hợp, chọn bảo hành rõ ràng và liên hệ TrumShop để được tư vấn trực tiếp." },
   },
   en: {
-    title: "ChatGPT Go, Plus & Pro monthly plans | TrumShop",
-    description: "Monthly ChatGPT plan guidance with flexible warranty options and direct support from TrumShop.",
+    title: "AI tools & digital utilities | TrumShop",
+    description: "Explore ChatGPT, Gemini, Kling AI, OpenArt, CapCut Pro and more digital tools with direct guidance from TrumShop.",
     alternates: { canonical: "/en", languages: { vi: "/vi", en: "/en" } },
-    openGraph: { locale: "en_US", url: "/en", title: "ChatGPT Go, Plus & Pro monthly plans | TrumShop", description: "Choose a suitable plan, flexible warranty and direct guidance from TrumShop." },
+    openGraph: { locale: "en_US", url: "/en", title: "AI tools & digital utilities | TrumShop", description: "Find a suitable tool, get clear warranty options and direct guidance from TrumShop." },
   },
 };
 
