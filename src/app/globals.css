@@ -2231,7 +2231,7 @@ footer {
 .contact-modal h2 { color: var(--heading); font-size: 41px; }
 .message-preview { background: var(--surface); }
 .message-preview > span { color: var(--subtle); font-size: 9px; }
-.message-preview p { color: var(--muted); font-size: 14px; }
+.message-preview p { padding-right: 0; color: var(--muted); font-size: 14px; }
 .message-preview button { background: var(--surface); color: var(--heading); font-size: 11px; }
 .modal-channels button { background: var(--surface); color: var(--heading); font-size: 12px; }
 .contact-placeholder-note { color: var(--muted); font-size: 12px; }

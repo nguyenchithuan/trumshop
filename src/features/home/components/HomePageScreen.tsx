@@ -33,7 +33,6 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
   const [openFaq, setOpenFaq] = useState(0);
   const [openPolicy, setOpenPolicy] = useState(0);
   const [toast, setToast] = useState("");
-  const [loadingChannel, setLoadingChannel] = useState("");
   const content = copy[language];
   const theme: Theme = resolvedTheme === "light" ? "light" : "dark";
 
@@ -88,19 +87,15 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
       : `Hello TrumShop, I would like advice on ${modal.product} for 1 month with ${modal.warranty}. Please send me a quote and instructions.`;
   }, [language, modal]);
 
-  const copyMessage = async () => {
-    try { await navigator.clipboard.writeText(consultationMessage); setToast(content.copied); }
-    catch { setToast(content.copyFallback); }
-  };
   const openAdvice = () => setModal({ product: content.genericProduct, warranty: content.genericWarranty });
   const openPurchase = (productId: string, productName: string) => setModal({ product: productName, warranty: warrantyOptions[language][warranties[productId]] });
-  const openChannel = async (channel: "zalo" | "facebook" | "instagram") => {
-    setLoadingChannel(channel);
-    await new Promise((resolve) => window.setTimeout(resolve, 350));
+  const openChannel = (channel: "zalo" | "facebook" | "instagram") => {
     const target = CONTACT_LINKS[channel];
-    if (target) window.open(target, "_blank", "noopener,noreferrer");
-    else { await copyMessage(); setToast(`${content.copied} · ${content.channelUpdating}`); }
-    setLoadingChannel("");
+    if (target) {
+      window.open(target, "_blank", "noopener,noreferrer");
+      return;
+    }
+    setToast(content.channelUpdating);
   };
 
   return <main>
@@ -112,9 +107,9 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
     <ComparisonSection content={content} /><PurchaseProcessSection content={content} /><BenefitsSection content={content} />
     <WarrantySection content={content} openItem={openPolicy} onToggle={(index) => setOpenPolicy(openPolicy === index ? -1 : index)} />
     <FaqSection content={content} openItem={openFaq} onToggle={(index) => setOpenFaq(openFaq === index ? -1 : index)} />
-    <ContactSection contacts={CONTACTS} content={content} language={language} supportHours={supportHours} onAdvice={openAdvice} onToast={() => setToast(content.demoContact)} />
-    <SiteFooter content={content} /><FloatingContactActions activeSection={activeSection} content={content} scrolled={scrolled} onAdvice={openAdvice} />
-    {modal && <ConsultationModal content={content} loadingChannel={loadingChannel} message={consultationMessage} onChannel={openChannel} onClose={() => setModal(null)} onCopy={copyMessage} />}
+    <ContactSection contacts={CONTACTS} content={content} language={language} supportHours={supportHours} onAdvice={openAdvice} />
+    <SiteFooter content={content} /><FloatingContactActions activeSection={activeSection} content={content} scrolled={scrolled} onAdvice={openAdvice} onZalo={() => window.location.assign(CONTACT_LINKS.zalo)} />
+    {modal && <ConsultationModal content={content} message={consultationMessage} onChannel={openChannel} onClose={() => setModal(null)} />}
     <div className={`toast ${toast ? "show" : ""}`} role="status"><span>✓</span>{toast}</div>
   </main>;
 }

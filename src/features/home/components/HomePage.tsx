@@ -18,11 +18,12 @@ export const CONTACTS = {
 };
 
 export const CONTACT_LINKS = {
-  zalo: "",
-  facebook: "",
-  instagram: "",
-  hotline: "",
-  email: "",
+  zalo: "https://zalo.me/0999999998",
+  // Placeholder page requested by the user. Replace this with the official page URL when available.
+  facebook: "https://www.facebook.com/TrumShopVietNam",
+  instagram: "https://www.instagram.com/trumshop.vn/",
+  hotline: "tel:0999999998",
+  email: "mailto:hello@trumshop.vn",
 };
 
 export const supportHours = {
@@ -402,7 +403,6 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState(0);
   const [openPolicy, setOpenPolicy] = useState(0);
   const [toast, setToast] = useState("");
-  const [loadingChannel, setLoadingChannel] = useState("");
   const theme: Theme = resolvedTheme === "light" ? "light" : "dark";
   const t = copy[lang];
 
@@ -471,26 +471,13 @@ export default function Home() {
     return () => window.clearTimeout(timeout);
   }, [toast]);
 
-  const copyMessage = async () => {
-    try {
-      await navigator.clipboard.writeText(consultationMessage);
-      setToast(t.copied);
-    } catch {
-      setToast(t.copyFallback);
-    }
-  };
-
-  const handleChannel = async (channel: "zalo" | "facebook" | "instagram") => {
-    setLoadingChannel(channel);
-    await new Promise((resolve) => window.setTimeout(resolve, 350));
+  const handleChannel = (channel: "zalo" | "facebook" | "instagram") => {
     const target = CONTACT_LINKS[channel];
     if (target) {
       window.open(target, "_blank", "noopener,noreferrer");
-    } else {
-      await copyMessage();
-      setToast(`${t.copied} · ${t.channelUpdating}`);
+      return;
     }
-    setLoadingChannel("");
+    setToast(t.channelUpdating);
   };
 
   const openPurchaseModal = (productId: string, productName: string) => {
@@ -782,7 +769,6 @@ export default function Home() {
             <h2 id="modal-title">{t.modalTitle}</h2>
             <div className="message-preview">
               <span>{t.message}</span><p>{consultationMessage}</p>
-              <button type="button" onClick={copyMessage}>{t.copy}<span>⧉</span></button>
             </div>
             <div className="modal-channels">{([
               ["zalo", "Z", t.channels[0]], ["facebook", "f", t.channels[1]], ["instagram", "◎", t.channels[2]],
@@ -792,9 +778,8 @@ export default function Home() {
                 className={`channel-${channel}`}
                 key={channel}
                 onClick={() => handleChannel(channel)}
-                disabled={Boolean(loadingChannel)}
               >
-                <span>{icon}</span>{loadingChannel === channel ? t.opening : label}<i>↗</i>
+                <span>{icon}</span>{label}<i>↗</i>
               </button>
             ))}</div>
             {!CONTACT_LINKS.zalo && <p className="contact-placeholder-note">{t.placeholder}</p>}
