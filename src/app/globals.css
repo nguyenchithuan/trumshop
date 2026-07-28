@@ -2945,7 +2945,7 @@ html[data-theme="light"] .mobile-contact-bar button:last-child {
   .product-title { gap: 10px; flex-wrap: wrap; }
   .product-title h3 { font-size: clamp(35px, 11vw, 42px); }
   .product-description { font-size: 15px; }
-  .mobile-contact-bar { right: 6px; bottom: max(6px, env(safe-area-inset-bottom)); left: 6px; }
+  .mobile-contact-bar { right: 6px; bottom: max(18px, calc(10px + env(safe-area-inset-bottom))); left: 6px; }
   .mobile-contact-bar button { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
 
@@ -3023,6 +3023,10 @@ html[data-theme="light"] .quick-contact-popover { box-shadow: 0 26px 65px rgba(2
   .quick-contact-trigger { width: 54px; height: 54px; }
   .quick-contact-popover { width: min(340px, calc(100vw - 24px)); padding: 21px; }
   .quick-contact-popover h2 { font-size: 22px; }
+  .quick-contact-widget.is-keyboard-open { bottom: calc(12px + var(--quick-contact-keyboard-offset)); }
+  .quick-contact-widget.is-keyboard-open .quick-contact-popover { position: fixed; right: 12px; bottom: calc(12px + var(--quick-contact-keyboard-offset)); width: calc(100vw - 24px); max-height: calc(var(--quick-contact-viewport-height) - 24px); overflow-y: auto; overscroll-behavior: contain; }
+  .quick-contact-widget.is-keyboard-open .quick-contact-popover::after { display: none; }
+  .quick-contact-widget.is-keyboard-open .quick-contact-trigger { opacity: 0; pointer-events: none; }
 }
 
 .featured-catalog { padding-top: 95px; padding-bottom: 95px; }
