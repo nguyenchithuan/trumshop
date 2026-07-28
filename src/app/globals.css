@@ -17,16 +17,25 @@
 html {
   scroll-behavior: smooth;
   background: var(--navy);
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
   background:
     radial-gradient(circle at 75% 0%, rgba(56, 97, 190, 0.14), transparent 34rem),
     #050a12;
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 a {
@@ -1746,7 +1755,14 @@ footer {
   .section-heading { grid-template-columns: 1fr; gap: 23px; }
   .product-grid { grid-template-columns: 1fr; }
   .product-card ul { min-height: 0; grid-template-columns: repeat(2, 1fr); }
-  .comparison-wrap { margin-right: -14px; overflow-x: auto; border-radius: 18px 0 0 18px; }
+  .comparison-wrap {
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 18px;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
   .comparison-wrap table { min-width: 760px; }
   .process-layout, .policy-layout, .faq-layout { grid-template-columns: 1fr; }
   .process-copy, .faq-copy { position: static; }
@@ -2263,7 +2279,7 @@ html[data-theme="light"] .mobile-menu a:hover { background: rgba(20,70,120,.05);
   .contact-grid > div > p { font-size: 16px; }
   .product-title h3 { font-size: 39px; }
   .product-card li { font-size: 15px; }
-  .comparison-wrap { margin-right: -14px; }
+  .comparison-wrap { margin: 0; }
   .timeline-step h3 { font-size: 21px; }
   .timeline-step p { font-size: 15px; }
   .accordion > button > span { font-size: 16px; }
@@ -2775,11 +2791,21 @@ html[data-theme="light"] .mobile-contact-bar button:last-child {
   body {
     width: 100%;
     max-width: 100%;
-    overflow-x: clip;
+    overflow-x: hidden;
   }
 
   body { padding-bottom: 88px; }
   .shell { width: calc(100% - 24px); }
+  .hero,
+  .hero-copy { min-width: 0; max-width: 100%; }
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(38px, 10.8vw, 44px);
+    overflow-wrap: break-word;
+  }
+  .hero-lead { max-width: 100%; font-size: 16px; }
+  .hero-plan-pills { max-width: 100%; }
+  .hero-visual { width: 100%; max-width: 100%; }
   .product-grid,
   .product-card,
   .select-wrap,
