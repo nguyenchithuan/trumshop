@@ -1,0 +1,8 @@
+import type { HomeCopy } from "@/features/home/components/HomePage";
+
+type Channel = "zalo" | "facebook" | "instagram";
+interface ConsultationModalProps { readonly content: HomeCopy; readonly loadingChannel: string; readonly message: string; readonly onChannel: (channel: Channel) => void; readonly onClose: () => void; readonly onCopy: () => void; }
+
+export default function ConsultationModal({ content, loadingChannel, message, onChannel, onClose, onCopy }: ConsultationModalProps) {
+  return <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}><section className="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button className="modal-close" type="button" aria-label={content.menuClose} onClick={onClose}>×</button><div className="modal-icon">T</div><p className="section-kicker">{content.modalKicker}</p><h2 id="modal-title">{content.modalTitle}</h2><div className="message-preview"><span>{content.message}</span><p>{message}</p><button type="button" onClick={onCopy}>{content.copy}<span>⧉</span></button></div><div className="modal-channels">{([ ["zalo", "Z", content.channels[0]], ["facebook", "f", content.channels[1]], ["instagram", "◎", content.channels[2]] ] as const).map(([channel, icon, label]) => <button type="button" className={`channel-${channel}`} key={channel} onClick={() => onChannel(channel)} disabled={Boolean(loadingChannel)}><span>{icon}</span>{loadingChannel === channel ? content.opening : label}<i>↗</i></button>)}</div><p className="contact-placeholder-note">{content.placeholder}</p><p className="modal-safety">{content.safety}</p></section></div>;
+}
