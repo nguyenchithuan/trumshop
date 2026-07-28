@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import { useTheme } from "@/providers/AppProviders";
 import { changeTheme } from "../themeTransition";
 import SiteHeader from "@/components/layout/SiteHeader";
+import SocialIcon from "@/components/ui/SocialIcon";
 
 export type Language = "vi" | "en";
 export type Theme = "dark" | "light";
@@ -771,15 +772,15 @@ export default function Home() {
               <span>{t.message}</span><p>{consultationMessage}</p>
             </div>
             <div className="modal-channels">{([
-              ["zalo", "Z", t.channels[0]], ["facebook", "f", t.channels[1]], ["instagram", "◎", t.channels[2]],
-            ] as const).map(([channel, icon, label]) => (
+              ["zalo", t.channels[0]], ["facebook", t.channels[1]], ["instagram", t.channels[2]],
+            ] as const).map(([channel, label]) => (
               <button
                 type="button"
                 className={`channel-${channel}`}
                 key={channel}
                 onClick={() => handleChannel(channel)}
               >
-                <span>{icon}</span>{label}<i>↗</i>
+                <span><SocialIcon channel={channel} /></span>{label}<i>↗</i>
               </button>
             ))}</div>
             {!CONTACT_LINKS.zalo && <p className="contact-placeholder-note">{t.placeholder}</p>}

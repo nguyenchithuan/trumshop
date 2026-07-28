@@ -1638,6 +1638,11 @@ footer {
   font-size: 12px;
 }
 
+.social-icon { width: 14px; height: 14px; fill: currentColor; }
+.modal-channels .channel-zalo > span { color: #0068ff; }
+.modal-channels .channel-facebook > span { color: #0866ff; }
+.modal-channels .channel-instagram > span { color: #ff0069; }
+
 .modal-channels button i { position: absolute; top: 13px; right: 13px; color: #64758d; font-style: normal; }
 .modal-channels button:hover { transform: translateY(-3px); }
 .modal-channels .channel-zalo:hover { border-color: rgba(52,137,255,.45); background: rgba(52,137,255,.08); }
