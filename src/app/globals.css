@@ -2787,6 +2787,79 @@ html[data-theme="light"] .modal-channels .channel-instagram > span {
   color: #bd3478;
 }
 
+/* Soft light palette: preserve separation between surfaces without the glare
+   caused by large pure-white areas. */
+html[data-theme="light"] {
+  --ink: #132c45;
+  --muted: #49637b;
+  --line: rgba(35, 72, 108, .28);
+  --navy: #e6eef4;
+  --page: #e6eef4;
+  --surface: #f3f7fa;
+  --surface-strong: #f8fafc;
+  --panel: #f8fafc;
+  --heading: #0d2740;
+  --subtle: #476178;
+  --shadow: rgba(24, 55, 89, .13);
+}
+
+html[data-theme="light"] body {
+  background:
+    radial-gradient(circle at 78% 0%, rgba(87, 128, 211, .11), transparent 34rem),
+    radial-gradient(circle at 2% 30%, rgba(17, 157, 151, .07), transparent 31rem),
+    linear-gradient(180deg, #eef3f7 0%, #e3ebf1 48%, #e8eff4 100%);
+}
+
+html[data-theme="light"] .site-header,
+html[data-theme="light"] .site-header.is-scrolled {
+  background: rgba(247, 250, 252, .93);
+}
+
+html[data-theme="light"] .utility-button,
+html[data-theme="light"] .button-ghost,
+html[data-theme="light"] .button-secondary {
+  background: linear-gradient(180deg, #f8fafc, #edf2f6);
+}
+
+html[data-theme="light"] .float-card,
+html[data-theme="light"] .orbit-node,
+html[data-theme="light"] .comparison-wrap,
+html[data-theme="light"] .bento-card,
+html[data-theme="light"] .accordion,
+html[data-theme="light"] .contact-panel {
+  background: #f6f9fb;
+}
+
+html[data-theme="light"] .product-card {
+  background:
+    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--card-accent) 10%, transparent), transparent 37%),
+    linear-gradient(155deg, #f8fafc 0%, #edf3f7 100%);
+}
+
+html[data-theme="light"] .bento-main,
+html[data-theme="light"] .contact-section {
+  background-color: #f5f8fa;
+}
+
+html[data-theme="light"] .select-wrap select,
+html[data-theme="light"] .step-number {
+  background: #f5f8fa;
+}
+
+html[data-theme="light"] .contact-modal {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(105, 74, 192, .08), transparent 33%),
+    #f6f9fb;
+  box-shadow: 0 38px 100px rgba(20, 38, 59, .24), inset 0 1px rgba(255, 255, 255, .72);
+}
+
+html[data-theme="light"] .modal-close,
+html[data-theme="light"] .message-preview,
+html[data-theme="light"] .message-preview button,
+html[data-theme="light"] .modal-channels button {
+  background: #eef3f7;
+}
+
 html[data-theme="light"] .floating-contact,
 html[data-theme="light"] .back-to-top {
   border-color: rgba(8, 127, 128, .31);
