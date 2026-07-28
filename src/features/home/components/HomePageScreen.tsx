@@ -15,6 +15,7 @@ import PlansSection from "@/features/plans/components/PlansSection";
 import FaqSection from "@/features/support/components/FaqSection";
 import WarrantySection from "@/features/support/components/WarrantySection";
 import { CONTACT_LINKS, CONTACTS, copy, products, supportHours, warrantyOptions, type Language, type Theme } from "./HomePage";
+import { changeTheme } from "../themeTransition";
 
 type ModalState = { readonly product: string; readonly warranty: string } | null;
 
@@ -105,7 +106,7 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
   return <main>
     <div className="scroll-progress" style={{ width: `${progress}%` }} />
     <div className="site-noise" aria-hidden="true" /><div className="ambient ambient-one" aria-hidden="true" /><div className="ambient ambient-two" aria-hidden="true" />
-    <SiteHeader activeSection={activeSection} content={content} language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(language === "vi" ? "/en" : "/vi")} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={() => setTheme(theme === "dark" ? "light" : "dark")} />
+    <SiteHeader activeSection={activeSection} content={content} language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(language === "vi" ? "/en" : "/vi")} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={() => changeTheme(theme === "dark" ? "light" : "dark", setTheme)} />
     <HeroSection content={content} />
     <PlansSection content={content} language={language} products={products} warranties={warranties} warrantyOptions={warrantyOptions[language]} onPurchase={openPurchase} onWarrantyChange={(productId, event) => setWarranties((current) => ({ ...current, [productId]: Number(event.target.value) }))} />
     <ComparisonSection content={content} /><PurchaseProcessSection content={content} /><BenefitsSection content={content} />

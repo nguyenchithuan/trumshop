@@ -12,6 +12,7 @@ export default function AppProviders({ children }: AppProvidersProps) {
     <ThemeProvider
       attribute="data-theme"
       defaultTheme="dark"
+      disableTransitionOnChange
       enableColorScheme
       enableSystem={false}
       storageKey="trumshop-theme"

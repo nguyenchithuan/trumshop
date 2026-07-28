@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { useTheme } from "next-themes";
+import { changeTheme } from "../themeTransition";
 import SiteHeader from "@/components/layout/SiteHeader";
 
 export type Language = "vi" | "en";
@@ -520,7 +521,7 @@ export default function Home() {
         onLanguageToggle={() => setLang(lang === "vi" ? "en" : "vi")}
         onMenuClose={() => setMenuOpen(false)}
         onMenuToggle={() => setMenuOpen((value) => !value)}
-        onThemeToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
+        onThemeToggle={() => changeTheme(theme === "dark" ? "light" : "dark", setTheme)}
       />
 
       <section className="hero shell" id="trang-chu">

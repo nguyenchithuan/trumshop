@@ -1888,6 +1888,33 @@ html[data-theme="light"] {
 
 html[data-theme="dark"] { color-scheme: dark; }
 
+/* A theme change must not animate every painted property in the document.
+   The compositor cross-fade below is the only transition used for this action. */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
+}
+
+html.theme-switching .ambient {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 180ms;
+    animation-timing-function: cubic-bezier(.22, 1, .36, 1);
+  }
+
+  ::view-transition-old(root) { animation-name: theme-switch-out; }
+  ::view-transition-new(root) { animation-name: theme-switch-in; }
+
+  @keyframes theme-switch-out { to { opacity: 0; } }
+  @keyframes theme-switch-in { from { opacity: 0; } }
+}
+
 body {
   background:
     radial-gradient(circle at 75% 0%, rgba(56, 97, 190, .16), transparent 34rem),
