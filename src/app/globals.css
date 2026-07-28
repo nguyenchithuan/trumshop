@@ -1489,8 +1489,8 @@ footer {
 
 .back-to-top {
   position: fixed;
-  right: 22px;
-  bottom: 22px;
+  right: 98px;
+  bottom: 29px;
   z-index: 24;
   display: grid;
   width: 44px;
@@ -2202,8 +2202,8 @@ footer {
 
 .floating-contact {
   position: fixed;
-  right: 22px;
-  bottom: 78px;
+  right: 158px;
+  bottom: 26px;
   z-index: 24;
   display: flex;
   min-height: 50px;
