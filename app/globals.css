@@ -574,7 +574,7 @@ h1 { animation: rise .8s .2s both; }
 }
 
 @media (max-width: 620px) {
-  .shell { width: min(100% - 28px, 1180px); }
+  .shell { width: min(1180px, calc(100% - 28px)); }
   .site-header { top: 10px; width: calc(100% - 20px); height: 58px; padding-left: 12px; border-color: var(--line); border-radius: 17px; background: rgba(7,13,24,.76); backdrop-filter: blur(18px); }
   .brand { font-size: 16px; }
   .brand-mark { width: 32px; height: 32px; }
@@ -2234,7 +2234,7 @@ html[data-theme="light"] .mobile-menu a:hover { background: rgba(20,70,120,.05);
 }
 
 @media (max-width: 620px) {
-  .shell { width: min(100% - 28px, 1180px); }
+  .shell { width: min(1180px, calc(100% - 28px)); }
   .site-header { top: 10px; width: calc(100% - 18px); padding-inline: 11px; }
   .site-header .brand > span:last-child { display: none; }
   .brand-mark { width: 38px; height: 38px; }
@@ -2767,4 +2767,38 @@ html[data-theme="light"] .mobile-contact-bar button:last-child {
   .hero h1 { font-size: clamp(43px, 12vw, 56px); }
   .section-label { min-height: 54px; padding: 8px 11px 8px 8px; font-size: 12px; }
   .section-label span { width: 40px; height: 36px; font-size: 16px; }
+}
+
+/* Narrow phones: 320px–430px must never retain desktop sizing or hide actions. */
+@media (max-width: 430px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  body { padding-bottom: 88px; }
+  .shell { width: calc(100% - 24px); }
+  .product-grid,
+  .product-card,
+  .select-wrap,
+  .select-wrap select { min-width: 0; max-width: 100%; }
+  .product-card { width: 100%; padding: 20px; }
+  .product-topline,
+  .product-title { gap: 10px; flex-wrap: wrap; }
+  .product-title h3 { font-size: clamp(35px, 11vw, 42px); }
+  .product-description { font-size: 15px; }
+  .mobile-contact-bar { right: 6px; bottom: max(6px, env(safe-area-inset-bottom)); left: 6px; }
+  .mobile-contact-bar button { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+@media (max-width: 360px) {
+  .site-header { width: calc(100% - 12px); padding-inline: 8px; }
+  .brand-mark { width: 34px; height: 34px; }
+  .utility-button { padding-inline: 8px; }
+  .language-toggle { min-width: 62px; }
+  .product-card { padding: 18px; }
+  .product-topline { font-size: 9px; }
+  .product-button { min-height: 54px; }
 }
