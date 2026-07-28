@@ -2895,7 +2895,13 @@ html[data-theme="light"] .mobile-contact-bar button:last-child {
 @media (max-width: 620px) {
   .language-toggle { min-width: 70px; padding-inline: 6px; }
   .language-icon { width: 25px; height: 25px; }
-  .hero h1 { font-size: clamp(43px, 12vw, 56px); }
+  .hero h1 {
+    margin-bottom: 28px;
+    font-size: clamp(43px, 12vw, 56px);
+    letter-spacing: -.028em;
+    line-height: 1.08;
+    word-spacing: .045em;
+  }
   .section-label { min-height: 54px; padding: 8px 11px 8px 8px; font-size: 12px; }
   .section-label span { width: 40px; height: 36px; font-size: 16px; }
 }
@@ -2915,7 +2921,7 @@ html[data-theme="light"] .mobile-contact-bar button:last-child {
   .hero-copy { min-width: 0; max-width: 100%; }
   .hero h1 {
     max-width: 100%;
-    font-size: clamp(38px, 10.8vw, 44px);
+    font-size: clamp(38px, 10.5vw, 43px);
     overflow-wrap: break-word;
   }
   .hero-lead { max-width: 100%; font-size: 16px; }

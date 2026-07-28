@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/providers/AppProviders";
 import { changeTheme } from "../themeTransition";
 import SiteHeader from "@/components/layout/SiteHeader";
 
