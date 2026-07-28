@@ -8,8 +8,9 @@ import ConsultationModal from "@/features/consultation/components/ConsultationMo
 import QuickContactWidget from "@/features/contact/components/QuickContactWidget";
 import { CONTACT_LINKS, copy, type Language, type Theme } from "@/features/home/components/HomePage";
 import { changeTheme } from "@/features/home/themeTransition";
-import type { CatalogProduct } from "@/features/catalog/data/catalog";
+import { catalogProductDetails, type CatalogProduct } from "@/features/catalog/data/catalog";
 import ProductCatalog from "./ProductCatalog";
+import ProductDetailsModal from "./ProductDetailsModal";
 
 type ModalState = { readonly product: string; readonly warranty: string } | null;
 
@@ -21,6 +22,7 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modal, setModal] = useState<ModalState>(null);
+  const [detailProduct, setDetailProduct] = useState<CatalogProduct | null>(null);
   const [toast, setToast] = useState("");
   const content = copy[language];
   const theme: Theme = resolvedTheme === "light" ? "light" : "dark";
@@ -36,12 +38,12 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
   }, [language]);
 
   useEffect(() => {
-    if (!modal) return;
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setModal(null); };
+    if (!modal && !detailProduct) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") { setModal(null); setDetailProduct(null); } };
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
     return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKeyDown); };
-  }, [modal]);
+  }, [detailProduct, modal]);
 
   useEffect(() => {
     if (!toast) return;
@@ -57,6 +59,7 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
   }, [language, modal]);
 
   const selectProduct = (product: CatalogProduct) => setModal({ product: product.name[language], warranty: product.warranty[language] });
+  const selectFromDetails = (product: CatalogProduct) => { setDetailProduct(null); selectProduct(product); };
   const openChannel = (channel: "zalo" | "facebook" | "instagram") => {
     const target = CONTACT_LINKS[channel];
     if (target) { window.open(target, "_blank", "noopener,noreferrer"); return; }
@@ -66,10 +69,11 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
   return <main className="catalog-page">
     <div className="site-noise" aria-hidden="true" /><div className="ambient ambient-one" aria-hidden="true" /><div className="ambient ambient-two" aria-hidden="true" />
     <SiteHeader activeSection="san-pham" catalogHref={catalogHref} content={content} homeHref={homeHref} isCatalogPage language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(`/${language === "vi" ? "en" : "vi"}/san-pham`)} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={(origin) => changeTheme(theme === "dark" ? "light" : "dark", setTheme, origin)} />
-    <ProductCatalog language={language} onSelect={selectProduct} />
+    <ProductCatalog language={language} onDetails={setDetailProduct} onSelect={selectProduct} />
     <SiteFooter catalogHref={catalogHref} content={content} homeHref={homeHref} />
     <QuickContactWidget language={language} />
     {modal && <ConsultationModal content={content} message={message} onChannel={openChannel} onClose={() => setModal(null)} />}
+    {detailProduct && <ProductDetailsModal detail={catalogProductDetails[detailProduct.id]} language={language} product={detailProduct} onClose={() => setDetailProduct(null)} onContact={selectFromDetails} />}
     <div className={`toast ${toast ? "show" : ""}`} role="status"><span>✓</span>{toast}</div>
   </main>;
 }

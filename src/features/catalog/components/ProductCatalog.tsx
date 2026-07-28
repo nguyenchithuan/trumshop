@@ -12,9 +12,10 @@ type Filter = "all" | "code" | CatalogCategory;
 interface ProductCatalogProps {
   readonly language: Language;
   readonly onSelect: (product: CatalogProduct) => void;
+  readonly onDetails: (product: CatalogProduct) => void;
 }
 
-export default function ProductCatalog({ language, onSelect }: ProductCatalogProps) {
+export default function ProductCatalog({ language, onDetails, onSelect }: ProductCatalogProps) {
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -22,7 +23,7 @@ export default function ProductCatalog({ language, onSelect }: ProductCatalogPro
   const filters: readonly Filter[] = ["all", "featured", "code", "creative", "tools"];
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedQuery(query), 1000);
+    const timeout = window.setTimeout(() => setDebouncedQuery(query), 2000);
     return () => window.clearTimeout(timeout);
   }, [query]);
 
@@ -60,7 +61,7 @@ export default function ProductCatalog({ language, onSelect }: ProductCatalogPro
         <div className="catalog-card-head"><div className="catalog-icon" aria-label={product.iconLabel}>{product.iconPath ? <Image alt="" height={32} src={product.iconPath} unoptimized width={32} /> : product.icon}</div><div>{product.soldOut ? <span className="sold-out-badge">{language === "vi" ? "Hết hàng" : "Out of stock"}</span> : product.featured && <span className="best-seller">{language === "vi" ? "Bán chạy" : "Best seller"}</span>}<span className="catalog-category">{labels[product.category]}</span></div></div>
         <h2>{product.name[language]}</h2><p>{product.description[language]}</p>
         <ul>{product.variants[language].map((variant) => <li key={variant}><i>✓</i>{variant}</li>)}</ul>
-        <div className="catalog-card-foot"><span><i>◌</i>{product.warranty[language]}</span><button className={product.soldOut ? "is-sold-out" : ""} disabled={product.soldOut} type="button" onClick={() => onSelect(product)}>{product.soldOut ? (language === "vi" ? "Tạm hết hàng" : "Out of stock") : (language === "vi" ? "Liên hệ chọn gói" : "Choose this plan")}<b>{product.soldOut ? "—" : "↗"}</b></button></div>
+        <div className="catalog-card-foot"><span><i>◌</i>{product.warranty[language]}</span><div className="catalog-card-actions"><button className="catalog-detail-button" type="button" onClick={() => onDetails(product)}>{language === "vi" ? "Xem chi tiết" : "View details"}<b>→</b></button><button className={product.soldOut ? "is-sold-out" : ""} disabled={product.soldOut} type="button" onClick={() => onSelect(product)}>{product.soldOut ? (language === "vi" ? "Tạm hết hàng" : "Out of stock") : (language === "vi" ? "Liên hệ chọn gói" : "Choose this plan")}<b>{product.soldOut ? "—" : "↗"}</b></button></div></div>
       </article>)}
     </div>
     {visibleProducts.length === 0 && <div className="catalog-empty"><span>⌕</span><h2>{language === "vi" ? "Chưa thấy sản phẩm phù hợp" : "No matching products yet"}</h2><p>{language === "vi" ? "Thử đổi từ khóa hoặc xóa bộ lọc để xem toàn bộ danh mục." : "Try another keyword or clear filters to view the full catalog."}</p><button type="button" onClick={() => { setFilter("all"); setQuery(""); setDebouncedQuery(""); }}>{language === "vi" ? "Xem toàn bộ sản phẩm" : "View all products"}</button></div>}
