@@ -28,6 +28,7 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
   const theme: Theme = resolvedTheme === "light" ? "light" : "dark";
   const homeHref = `/${language}`;
   const catalogHref = `/${language}/san-pham`;
+  const advisorHref = `/${language}/tu-van`;
 
   useEffect(() => {
     document.documentElement.lang = language;
@@ -68,7 +69,7 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
 
   return <main className="catalog-page">
     <div className="site-noise" aria-hidden="true" /><div className="ambient ambient-one" aria-hidden="true" /><div className="ambient ambient-two" aria-hidden="true" />
-    <SiteHeader activeSection="san-pham" catalogHref={catalogHref} content={content} homeHref={homeHref} isCatalogPage language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(`/${language === "vi" ? "en" : "vi"}/san-pham`)} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={(origin) => changeTheme(theme === "dark" ? "light" : "dark", setTheme, origin)} />
+    <SiteHeader activeSection="san-pham" advisorHref={advisorHref} catalogHref={catalogHref} content={content} homeHref={homeHref} isCatalogPage language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(`/${language === "vi" ? "en" : "vi"}/san-pham`)} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={(origin) => changeTheme(theme === "dark" ? "light" : "dark", setTheme, origin)} />
     <ProductCatalog language={language} onDetails={setDetailProduct} onSelect={selectProduct} />
     <SiteFooter catalogHref={catalogHref} content={content} homeHref={homeHref} />
     <QuickContactWidget language={language} />

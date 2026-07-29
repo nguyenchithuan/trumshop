@@ -124,8 +124,8 @@ export const products = [
 export const copy = {
   vi: {
     nav: [
-      ["trang-chu", "Trang chủ"],
       ["san-pham", "Sản phẩm"],
+      ["tu-van", "Tìm công cụ"],
       ["quy-trinh", "Cách mua"],
       ["bao-hanh", "Bảo hành"],
       ["faq", "FAQ"],
@@ -140,7 +140,7 @@ export const copy = {
     heroAccent: "Chọn nhanh. Hỗ trợ trực tiếp.",
     heroLead: "ChatGPT, Gemini và nhiều công cụ sáng tạo được chọn lọc. Tư vấn rõ ràng từ TrumShop.",
     seePlans: "Xem sản phẩm",
-    contactNow: "Liên hệ ngay",
+    contactNow: "Tìm công cụ phù hợp",
     trusts: ["Danh mục đa sản phẩm", "Bảo hành rõ ràng", "Không nhập mật khẩu"],
     supporting: "ĐANG HỖ TRỢ",
     quickUpgrade: "Chọn công cụ phù hợp",
@@ -254,8 +254,8 @@ export const copy = {
   },
   en: {
     nav: [
-      ["trang-chu", "Home"],
       ["san-pham", "Products"],
+      ["tu-van", "Find a tool"],
       ["quy-trinh", "How to buy"],
       ["bao-hanh", "Warranty"],
       ["faq", "FAQ"],
@@ -270,7 +270,7 @@ export const copy = {
     heroAccent: "Choose quickly. Get direct support.",
     heroLead: "ChatGPT, Gemini and curated creative tools, with clear guidance from TrumShop.",
     seePlans: "View plans",
-    contactNow: "Contact now",
+    contactNow: "Find my tool",
     trusts: ["Multi-product catalog", "Clear warranty", "No password entry"],
     supporting: "NOW SUPPORTING",
     quickUpgrade: "Find the right tool",

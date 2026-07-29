@@ -3,9 +3,10 @@ import type { HomeCopy } from "@/features/home/components/HomePage";
 interface HeroSectionProps {
   readonly content: HomeCopy;
   readonly catalogHref: string;
+  readonly advisorHref: string;
 }
 
-export default function HeroSection({ content, catalogHref }: HeroSectionProps) {
+export default function HeroSection({ content, catalogHref, advisorHref }: HeroSectionProps) {
   return (
     <section className="hero shell" id="trang-chu">
       <div className="hero-grid" aria-hidden="true" />
@@ -18,7 +19,7 @@ export default function HeroSection({ content, catalogHref }: HeroSectionProps) 
         </div>
         <div className="hero-actions reveal-three">
           <a className="button button-primary" href={catalogHref}>{content.seePlans} <span className="arrow">→</span></a>
-          <a className="button button-secondary" href="#lien-he">{content.contactNow} <span>↗</span></a>
+          <a className="button button-secondary" href={advisorHref}>{content.contactNow} <span>↗</span></a>
         </div>
         <div className="trust-row reveal-four">
           {content.trusts.map((item) => <span key={item}><i>✓</i>{item}</span>)}

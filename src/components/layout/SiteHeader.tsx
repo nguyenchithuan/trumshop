@@ -10,6 +10,7 @@ interface SiteHeaderProps {
   readonly scrolled: boolean;
   readonly theme: Theme;
   readonly catalogHref?: string;
+  readonly advisorHref?: string;
   readonly homeHref?: string;
   readonly isCatalogPage?: boolean;
   readonly onLanguageToggle: () => void;
@@ -26,6 +27,7 @@ export default function SiteHeader({
   scrolled,
   theme,
   catalogHref = "#goi-dich-vu",
+  advisorHref = "#tu-van",
   homeHref = "#trang-chu",
   isCatalogPage = false,
   onLanguageToggle,
@@ -35,6 +37,7 @@ export default function SiteHeader({
 }: SiteHeaderProps) {
   const hrefFor = (id: string) => {
     if (id === "san-pham") return catalogHref;
+    if (id === "tu-van") return advisorHref;
     return isCatalogPage ? `${homeHref}#${id}` : `#${id}`;
   };
 

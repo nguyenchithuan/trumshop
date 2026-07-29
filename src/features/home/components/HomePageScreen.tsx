@@ -11,6 +11,7 @@ import QuickContactWidget from "@/features/contact/components/QuickContactWidget
 import BenefitsSection from "@/features/home/components/sections/BenefitsSection";
 import FeaturedCatalogSection from "@/features/home/components/sections/FeaturedCatalogSection";
 import HeroSection from "@/features/home/components/sections/HeroSection";
+import ProductNeedSection from "@/features/home/components/sections/ProductNeedSection";
 import PurchaseProcessSection from "@/features/home/components/sections/PurchaseProcessSection";
 import FaqSection from "@/features/support/components/FaqSection";
 import WarrantySection from "@/features/support/components/WarrantySection";
@@ -36,6 +37,7 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
   const theme: Theme = resolvedTheme === "light" ? "light" : "dark";
   const homeHref = `/${language}`;
   const catalogHref = `/${language}/san-pham`;
+  const advisorHref = `/${language}/tu-van`;
 
   useEffect(() => {
     document.documentElement.lang = language;
@@ -101,8 +103,9 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
   return <main>
     <div className="scroll-progress" style={{ width: `${progress}%` }} />
     <div className="site-noise" aria-hidden="true" /><div className="ambient ambient-one" aria-hidden="true" /><div className="ambient ambient-two" aria-hidden="true" />
-    <SiteHeader activeSection={activeSection} catalogHref={catalogHref} content={content} homeHref={homeHref} language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(language === "vi" ? "/en" : "/vi")} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={(origin) => changeTheme(theme === "dark" ? "light" : "dark", setTheme, origin)} />
-    <HeroSection catalogHref={catalogHref} content={content} />
+    <SiteHeader activeSection={activeSection} advisorHref={advisorHref} catalogHref={catalogHref} content={content} homeHref={homeHref} language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(language === "vi" ? "/en" : "/vi")} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={(origin) => changeTheme(theme === "dark" ? "light" : "dark", setTheme, origin)} />
+    <HeroSection advisorHref={advisorHref} catalogHref={catalogHref} content={content} />
+    <ProductNeedSection advisorHref={advisorHref} catalogHref={catalogHref} language={language} />
     <FeaturedCatalogSection catalogHref={catalogHref} language={language} />
     <PurchaseProcessSection catalogHref={catalogHref} content={content} /><BenefitsSection content={content} />
     <WarrantySection content={content} openItem={openPolicy} onToggle={(index) => setOpenPolicy(openPolicy === index ? -1 : index)} />
