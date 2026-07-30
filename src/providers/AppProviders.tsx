@@ -20,7 +20,12 @@ function applyTheme(theme: AppTheme) {
 }
 
 function getThemeSnapshot(): AppTheme {
-  return window.localStorage.getItem(THEME_STORAGE_KEY) === "dark" ? "dark" : "light";
+  try {
+    return window.localStorage.getItem(THEME_STORAGE_KEY) === "dark" ? "dark" : "light";
+  } catch {
+    // Private mode and some in-app browsers can deny storage access.
+    return "light";
+  }
 }
 
 function subscribeToTheme(onStoreChange: () => void) {
@@ -46,7 +51,7 @@ export default function AppProviders({ children }: AppProvidersProps) {
 
   const setTheme = useCallback((theme: AppTheme) => {
     applyTheme(theme);
-    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    try { window.localStorage.setItem(THEME_STORAGE_KEY, theme); } catch { /* Theme still works for this visit without storage. */ }
     themeSubscribers.forEach((onStoreChange) => onStoreChange());
   }, []);
 

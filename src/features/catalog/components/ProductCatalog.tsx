@@ -23,6 +23,7 @@ export default function ProductCatalog({ language, onDetails, onSelect }: Produc
   const [savedIds, setSavedIds] = useState<readonly string[]>([]);
   const [recentIds, setRecentIds] = useState<readonly string[]>([]);
   const filterControlRef = useRef<HTMLDivElement>(null);
+  const hasReadInitialState = useRef(false);
   const labels = categoryLabels[language];
   const filters: readonly SelectableFilter[] = ["featured", "creative", "tools", "code", "saved"];
 
@@ -32,6 +33,8 @@ export default function ProductCatalog({ language, onDetails, onSelect }: Produc
   }, [query]);
 
   useEffect(() => {
+    if (hasReadInitialState.current) return;
+    hasReadInitialState.current = true;
     const frame = window.requestAnimationFrame(() => {
       try {
         const saved = JSON.parse(window.localStorage.getItem("trumshop-saved") ?? "[]");

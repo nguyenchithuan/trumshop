@@ -43,8 +43,8 @@ export default function SiteHeader({
     return isCatalogPage ? `${homeHref}#${id}` : `#${id}`;
   };
   const discoverLinks = language === "vi"
-    ? [{ href: `${homeHref}/bo-suu-tap`, icon: "✦", label: "Chọn theo nhu cầu", note: "Bộ sưu tập" }, { href: `${homeHref}/so-sanh`, icon: "↔", label: "So sánh công cụ", note: "Đặt cạnh nhau" }, { href: `${homeHref}/huong-dan`, icon: "?", label: "Trung tâm hướng dẫn", note: "Bắt đầu nhanh" }]
-    : [{ href: `${homeHref}/bo-suu-tap`, icon: "✦", label: "Choose by goal", note: "Collections" }, { href: `${homeHref}/so-sanh`, icon: "↔", label: "Compare tools", note: "Side by side" }, { href: `${homeHref}/huong-dan`, icon: "?", label: "Guide center", note: "Start faster" }];
+    ? [{ href: `${homeHref}/bo-suu-tap`, icon: "sparkles" as const, label: "Chọn theo nhu cầu", note: "Bộ sưu tập" }, { href: `${homeHref}/so-sanh`, icon: "compare" as const, label: "So sánh công cụ", note: "Đặt cạnh nhau" }, { href: `${homeHref}/huong-dan`, icon: "guide" as const, label: "Trung tâm hướng dẫn", note: "Bắt đầu nhanh" }]
+    : [{ href: `${homeHref}/bo-suu-tap`, icon: "sparkles" as const, label: "Choose by goal", note: "Collections" }, { href: `${homeHref}/so-sanh`, icon: "compare" as const, label: "Compare tools", note: "Side by side" }, { href: `${homeHref}/huong-dan`, icon: "guide" as const, label: "Guide center", note: "Start faster" }];
   const discoverLabel = language === "vi" ? "Khám phá" : "Explore";
   const savedLabel = language === "vi" ? "Sản phẩm đã lưu" : "Saved products";
 
@@ -60,7 +60,7 @@ export default function SiteHeader({
           {id === "san-pham" && <div className="discover-menu" onMouseLeave={() => setDiscoverOpen(false)}>
             <button aria-expanded={discoverOpen} className={discoverOpen ? "active" : ""} type="button" onClick={() => setDiscoverOpen((open) => !open)}>{discoverLabel}<i aria-hidden="true" /></button>
             <div className={`discover-popover ${discoverOpen ? "open" : ""}`}>
-              {discoverLinks.map((link) => <a href={link.href} key={link.href} onClick={() => setDiscoverOpen(false)}><span>{link.icon}</span><div><strong>{link.label}</strong><small>{link.note}</small></div><b>→</b></a>)}
+              {discoverLinks.map((link) => <a href={link.href} key={link.href} onClick={() => setDiscoverOpen(false)}><span><DiscoverMenuIcon name={link.icon} /></span><div><strong>{link.label}</strong><small>{link.note}</small></div><b><ArrowRightIcon /></b></a>)}
             </div>
           </div>}
         </div>)}
@@ -101,10 +101,22 @@ export default function SiteHeader({
         {content.nav.map(([id, label]) => (
           <a href={hrefFor(id)} key={id} onClick={onMenuClose}>{label}</a>
         ))}
-        <div className="mobile-discover-links"><span>{discoverLabel}</span>{discoverLinks.map((link) => <a href={link.href} key={link.href} onClick={onMenuClose}>{link.icon} {link.label}<b>→</b></a>)}</div>
+        <div className="mobile-discover-links"><span>{discoverLabel}</span>{discoverLinks.map((link) => <a href={link.href} key={link.href} onClick={onMenuClose}><i><DiscoverMenuIcon name={link.icon} /></i>{link.label}<b><ArrowRightIcon /></b></a>)}</div>
         <a href={`${homeHref}/da-luu`} onClick={onMenuClose}>♡ {savedLabel}<b>→</b></a>
         <a href={isCatalogPage ? `${homeHref}#lien-he` : "#lien-he"} onClick={onMenuClose}>{content.contact} <span>↗</span></a>
       </div>
     </header>
   );
+}
+
+type DiscoverMenuIconName = "sparkles" | "compare" | "guide";
+
+function DiscoverMenuIcon({ name }: { readonly name: DiscoverMenuIconName }) {
+  if (name === "sparkles") return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 1.72 5.28L19 10l-5.28 1.72L12 17l-1.72-5.28L5 10l5.28-1.72L12 3ZM19 15l.78 2.22L22 18l-2.22.78L19 21l-.78-2.22L16 18l2.22-.78L19 15Z" fill="currentColor" /></svg>;
+  if (name === "compare") return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 7h10M7 7l3-3M7 7l3 3M17 17H7m10 0-3-3m3 3-3 3" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.5 4.5h8.2a2.3 2.3 0 0 1 2.3 2.3v12.7H7.8a2.3 2.3 0 0 0-2.3 2.3V4.5Zm13 0h-2.5v15h.2a2.3 2.3 0 0 1 2.3 2.3V4.5Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /><path d="M8.5 9h4.8M8.5 12.5h4.8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
+}
+
+function ArrowRightIcon() {
+  return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }

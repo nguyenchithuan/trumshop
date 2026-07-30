@@ -62,11 +62,21 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
-      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
-    }), { threshold: 0.12 });
-    document.querySelectorAll(".scroll-reveal").forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
+    const nodes = document.querySelectorAll<HTMLElement>(".scroll-reveal");
+    const revealAll = () => nodes.forEach((node) => node.classList.add("is-visible"));
+    if (!("IntersectionObserver" in window)) {
+      revealAll();
+      return;
+    }
+    try {
+      const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+      }), { threshold: 0.12 });
+      nodes.forEach((node) => observer.observe(node));
+      return () => observer.disconnect();
+    } catch {
+      revealAll();
+    }
   }, [language]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTheme } from "@/providers/AppProviders";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SiteFooter from "@/components/layout/SiteFooter";
@@ -58,6 +58,9 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
   }, [language, modal]);
 
   const selectProduct = (product: CatalogProduct) => setModal({ product: product.name[language], warranty: product.warranty[language] });
+  const openProductDetails = useCallback((product: CatalogProduct) => {
+    window.location.assign(`${catalogHref}/${encodeURIComponent(product.id)}`);
+  }, [catalogHref]);
   const openChannel = (channel: "zalo" | "facebook" | "instagram") => {
     const target = CONTACT_LINKS[channel];
     if (target) { window.open(target, "_blank", "noopener,noreferrer"); return; }
@@ -67,7 +70,7 @@ export default function ProductCatalogScreen({ initialLanguage }: ProductCatalog
   return <main className="catalog-page">
     <div className="site-noise" aria-hidden="true" /><div className="ambient ambient-one" aria-hidden="true" /><div className="ambient ambient-two" aria-hidden="true" />
     <SiteHeader activeSection="san-pham" advisorHref={advisorHref} catalogHref={catalogHref} content={content} homeHref={homeHref} isCatalogPage language={language} menuOpen={menuOpen} scrolled={scrolled} theme={theme} onLanguageToggle={() => window.location.assign(`/${language === "vi" ? "en" : "vi"}/san-pham`)} onMenuClose={() => setMenuOpen(false)} onMenuToggle={() => setMenuOpen((value) => !value)} onThemeToggle={(origin) => changeTheme(theme === "dark" ? "light" : "dark", setTheme, origin)} />
-    <ProductCatalog language={language} onDetails={(product) => window.location.assign(`${catalogHref}/${product.id}`)} onSelect={selectProduct} />
+    <ProductCatalog language={language} onDetails={openProductDetails} onSelect={selectProduct} />
     <SiteFooter catalogHref={catalogHref} content={content} homeHref={homeHref} language={language} />
     <QuickContactWidget language={language} />
     {modal && <ConsultationModal content={content} message={message} onChannel={openChannel} onClose={() => setModal(null)} />}
