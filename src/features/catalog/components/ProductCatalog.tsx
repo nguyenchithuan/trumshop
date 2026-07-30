@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import Image from "next/image";
-import type { CatalogCategory, CatalogProduct } from "@/features/catalog/data/catalog";
+import type { CatalogProduct } from "@/features/catalog/data/catalog";
 import { catalogProducts, categoryLabels } from "@/features/catalog/data/catalog";
 import type { Language } from "@/features/home/components/HomePage";
 
-type Filter = "all" | "code" | "saved" | CatalogCategory;
+type SelectableFilter = "featured" | "creative" | "tools" | "code" | "saved";
 
 interface ProductCatalogProps {
   readonly language: Language;
@@ -16,13 +16,15 @@ interface ProductCatalogProps {
 }
 
 export default function ProductCatalog({ language, onDetails, onSelect }: ProductCatalogProps) {
-  const [filter, setFilter] = useState<Filter>("all");
+  const [selectedFilters, setSelectedFilters] = useState<readonly SelectableFilter[]>([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [savedIds, setSavedIds] = useState<readonly string[]>([]);
   const [recentIds, setRecentIds] = useState<readonly string[]>([]);
+  const filterControlRef = useRef<HTMLDivElement>(null);
   const labels = categoryLabels[language];
-  const filters: readonly Filter[] = ["all", "featured", "chatgpt", "gemini", "creative", "tools", "code"];
+  const filters: readonly SelectableFilter[] = ["featured", "creative", "tools", "code", "saved"];
 
   useEffect(() => {
     const timeout = window.setTimeout(() => setDebouncedQuery(query), 180);
@@ -39,9 +41,10 @@ export default function ProductCatalog({ language, onDetails, onSelect }: Produc
       } catch { /* Storage is an optional convenience, never a requirement. */ }
 
       const params = new URLSearchParams(window.location.search);
-      const category = params.get("category") as Filter | null;
-      const validFilters: readonly Filter[] = ["all", "featured", "chatgpt", "gemini", "creative", "tools", "code", "saved"];
-      if (category && validFilters.includes(category)) setFilter(category);
+      const category = params.get("category");
+      const validFilters: readonly SelectableFilter[] = ["featured", "creative", "tools", "code", "saved"];
+      const initialFilters = (category ?? "").split(",").filter((item): item is SelectableFilter => validFilters.includes(item as SelectableFilter));
+      if (initialFilters.length) setSelectedFilters(initialFilters);
       const initialQuery = params.get("q");
       if (initialQuery) { setQuery(initialQuery); setDebouncedQuery(initialQuery); }
       const product = catalogProducts.find((item) => item.id === params.get("product"));
@@ -50,24 +53,48 @@ export default function ProductCatalog({ language, onDetails, onSelect }: Produc
     return () => window.cancelAnimationFrame(frame);
   }, [onDetails]);
 
+  useEffect(() => {
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (filterControlRef.current && !filterControlRef.current.contains(event.target as Node)) setIsFilterOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsFilterOpen(false);
+    };
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("mousedown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
+
   const visibleProducts = useMemo(() => {
     const normalizedQuery = debouncedQuery.trim().toLocaleLowerCase();
     return catalogProducts.filter((product) => {
-      const matchesFilter = filter === "all" || (filter === "featured" ? product.featured : filter === "code" ? product.codeRelated : filter === "saved" ? savedIds.includes(product.id) : product.category === filter);
+      const matchesFilter = selectedFilters.length === 0 || selectedFilters.some((filter) => {
+        if (filter === "featured") return product.featured;
+        if (filter === "code") return product.codeRelated;
+        if (filter === "saved") return savedIds.includes(product.id);
+        return product.category === filter;
+      });
       const haystack = [product.name[language], product.description[language], ...product.variants[language]].join(" ").toLocaleLowerCase();
       return matchesFilter && (!normalizedQuery || haystack.includes(normalizedQuery));
     }).sort((first, second) => Number(Boolean(second.codeRelated)) - Number(Boolean(first.codeRelated)));
-  }, [debouncedQuery, filter, language, savedIds]);
+  }, [debouncedQuery, language, savedIds, selectedFilters]);
 
-  const updateUrl = (nextFilter: Filter, nextQuery = query) => {
+  const updateUrl = (nextFilters: readonly SelectableFilter[], nextQuery = query) => {
     const params = new URLSearchParams();
-    if (nextFilter !== "all") params.set("category", nextFilter);
+    if (nextFilters.length) params.set("category", nextFilters.join(","));
     if (nextQuery.trim()) params.set("q", nextQuery.trim());
     const suffix = params.toString();
     window.history.replaceState(null, "", `${window.location.pathname}${suffix ? `?${suffix}` : ""}`);
   };
-  const chooseFilter = (nextFilter: Filter) => { setFilter(nextFilter); updateUrl(nextFilter); };
-  const clearFilters = () => { setFilter("all"); setQuery(""); setDebouncedQuery(""); updateUrl("all", ""); };
+  const toggleFilter = (nextFilter: SelectableFilter) => {
+    const nextFilters = selectedFilters.includes(nextFilter) ? selectedFilters.filter((filter) => filter !== nextFilter) : [...selectedFilters, nextFilter];
+    setSelectedFilters(nextFilters);
+    updateUrl(nextFilters);
+  };
+  const clearFilters = () => { setSelectedFilters([]); setQuery(""); setDebouncedQuery(""); updateUrl([], ""); };
   const toggleSaved = (id: string) => {
     const next = savedIds.includes(id) ? savedIds.filter((item) => item !== id) : [...savedIds, id];
     setSavedIds(next);
@@ -89,19 +116,38 @@ export default function ProductCatalog({ language, onDetails, onSelect }: Produc
       <div className="catalog-highlight-chips"><span>✦ ChatGPT</span><span>✦ Gemini</span><span>◉ Kling AI</span><span>✂ CapCut Pro</span></div>
     </div>
 
-    <div className="catalog-toolbar" aria-label={language === "vi" ? "Tìm và lọc sản phẩm" : "Search and filter products"}>
-      <label className="catalog-search">
-        <span aria-hidden="true">⌕</span>
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={language === "vi" ? "Tìm ChatGPT, Kling AI, CapCut..." : "Search ChatGPT, Kling AI, CapCut..."} />
-        {query && <button type="button" onClick={() => { setQuery(""); setDebouncedQuery(""); }} aria-label={language === "vi" ? "Xóa tìm kiếm" : "Clear search"}>×</button>}
-      </label>
-      <div className="catalog-filter-row" role="group" aria-label={language === "vi" ? "Nhóm sản phẩm" : "Product groups"}>
-        {filters.map((item) => <button className={filter === item ? "active" : ""} type="button" key={item} onClick={() => chooseFilter(item)}>{item === "saved" ? (language === "vi" ? "Đã lưu" : "Saved") : labels[item]}</button>)}
-        {savedIds.length > 0 && <button className={filter === "saved" ? "active" : ""} type="button" onClick={() => chooseFilter("saved")}>♡ {language === "vi" ? `Đã lưu (${savedIds.length})` : `Saved (${savedIds.length})`}</button>}
+    <div className="catalog-controls" aria-label={language === "vi" ? "Tìm và lọc sản phẩm" : "Search and filter products"}>
+      <div className="catalog-search-area">
+        <span className="catalog-control-label">{language === "vi" ? "TÌM SẢN PHẨM" : "SEARCH PRODUCTS"}</span>
+        <label className="catalog-search">
+          <span aria-hidden="true">⌕</span>
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={language === "vi" ? "Tìm ChatGPT, Kling AI, CapCut..." : "Search ChatGPT, Kling AI, CapCut..."} />
+          {query && <button type="button" onClick={() => { setQuery(""); setDebouncedQuery(""); updateUrl(selectedFilters, ""); }} aria-label={language === "vi" ? "Xóa tìm kiếm" : "Clear search"}>×</button>}
+        </label>
+      </div>
+      <div className="catalog-filter-control" ref={filterControlRef}>
+        <span className="catalog-control-label">{language === "vi" ? "LỌC DANH MỤC" : "FILTER CATALOG"}</span>
+        <button className={`catalog-filter-trigger ${selectedFilters.length ? "has-selection" : ""}`} type="button" aria-expanded={isFilterOpen} aria-controls="catalog-filter-panel" onClick={() => setIsFilterOpen((open) => !open)}>
+          <span className="filter-icon" aria-hidden="true">≡</span>
+          <span>{language === "vi" ? "Filter" : "Filter"}</span>
+          {selectedFilters.length > 0 && <b>{selectedFilters.length}</b>}
+          <i aria-hidden="true">⌄</i>
+        </button>
+        {isFilterOpen && <div className="catalog-filter-popover" id="catalog-filter-panel" role="dialog" aria-label={language === "vi" ? "Chọn bộ lọc" : "Choose filters"}>
+          <div className="catalog-filter-popover-heading"><div><strong>{language === "vi" ? "Chọn danh mục" : "Choose categories"}</strong><span>{language === "vi" ? "Có thể chọn nhiều mục" : "Select one or more"}</span></div>{selectedFilters.length > 0 && <button type="button" onClick={() => { setSelectedFilters([]); updateUrl([]); }}>{language === "vi" ? "Xóa chọn" : "Clear"}</button>}</div>
+          <div className="catalog-filter-options">
+            {filters.map((item) => <label className={selectedFilters.includes(item) ? "selected" : ""} key={item}>
+              <input checked={selectedFilters.includes(item)} type="checkbox" onChange={() => toggleFilter(item)} />
+              <span className="filter-checkbox" aria-hidden="true">✓</span>
+              <span>{item === "saved" ? (language === "vi" ? `Đã lưu${savedIds.length ? ` (${savedIds.length})` : ""}` : `Saved${savedIds.length ? ` (${savedIds.length})` : ""}`) : labels[item]}</span>
+            </label>)}
+          </div>
+          <button className="catalog-filter-done" type="button" onClick={() => setIsFilterOpen(false)}>{language === "vi" ? "Xong" : "Done"}<span>→</span></button>
+        </div>}
       </div>
     </div>
 
-    <div className="catalog-results" aria-live="polite"><span>{language === "vi" ? `${visibleProducts.length} sản phẩm phù hợp` : `${visibleProducts.length} matching products`}</span>{filter !== "all" || query ? <button type="button" onClick={clearFilters}>{language === "vi" ? "Xóa bộ lọc" : "Clear filters"}</button> : null}</div>
+    <div className="catalog-results" aria-live="polite"><span>{language === "vi" ? `${visibleProducts.length} sản phẩm phù hợp` : `${visibleProducts.length} matching products`}</span>{selectedFilters.length > 0 || query ? <button type="button" onClick={clearFilters}>{language === "vi" ? "Xóa bộ lọc" : "Clear filters"}</button> : null}</div>
     <div className="catalog-grid">
       {visibleProducts.map((product, index) => <article className={`catalog-card ${product.featured ? "is-featured" : ""}`} key={product.id} style={{ "--catalog-accent": product.accent, "--catalog-delay": `${index * 55}ms` } as CSSProperties}>
         <div className="catalog-card-head"><div className="catalog-icon" aria-label={product.iconLabel}>{product.iconPath ? <Image alt="" height={32} src={product.iconPath} unoptimized width={32} /> : product.icon}</div><div className="catalog-card-badges"><button className={`save-product ${savedIds.includes(product.id) ? "saved" : ""}`} type="button" aria-label={savedIds.includes(product.id) ? (language === "vi" ? "Bỏ lưu sản phẩm" : "Remove saved product") : (language === "vi" ? "Lưu sản phẩm" : "Save product")} onClick={() => toggleSaved(product.id)}>{savedIds.includes(product.id) ? "♥" : "♡"}</button>{product.soldOut ? <span className="sold-out-badge">{language === "vi" ? "Hết hàng" : "Out of stock"}</span> : product.featured && <span className="best-seller">{language === "vi" ? "Bán chạy" : "Best seller"}</span>}<span className="catalog-category">{labels[product.category]}</span></div></div>
