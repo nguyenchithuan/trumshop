@@ -104,7 +104,8 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
   const openChannel = (channel: "zalo" | "facebook" | "instagram") => {
     const target = CONTACT_LINKS[channel];
     if (target) {
-      window.open(target, "_blank", "noopener,noreferrer");
+      const opened = window.open(target, "_blank", "noopener,noreferrer");
+      if (!opened) window.location.assign(target);
       return;
     }
     setToast(content.channelUpdating);

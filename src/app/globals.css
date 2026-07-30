@@ -3389,8 +3389,9 @@ html[data-theme="light"] .orbit-node { border-color: rgba(60, 118, 164, .3); bac
 @media (max-width: 800px) {
   .scroll-reveal { opacity: 1; transform: none; }
   button, a, input, select { touch-action: manipulation; }
-  .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .site-header { overflow: visible; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .site-noise { display: none; }
+  .mobile-menu { z-index: 20; max-height: calc(100dvh - 86px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 }
 @media (max-width: 620px) {
   .quick-contact-popover, .catalog-filter-popover, .mobile-menu { backdrop-filter: none; -webkit-backdrop-filter: none; }

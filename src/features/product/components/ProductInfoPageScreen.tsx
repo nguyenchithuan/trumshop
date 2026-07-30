@@ -71,7 +71,11 @@ export default function ProductInfoPageScreen({ initialLanguage, product }: Prod
 
   const openChannel = (channel: "zalo" | "facebook" | "instagram") => {
     const target = CONTACT_LINKS[channel];
-    if (target) { window.open(target, "_blank", "noopener,noreferrer"); return; }
+    if (target) {
+      const opened = window.open(target, "_blank", "noopener,noreferrer");
+      if (!opened) window.location.assign(target);
+      return;
+    }
     setToast(content.channelUpdating);
   };
 
