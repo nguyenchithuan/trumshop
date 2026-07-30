@@ -16,5 +16,5 @@ type LocaleLayoutProps = Readonly<{ children: React.ReactNode; params: Promise<{
 export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
-  return <html lang={locale} suppressHydrationWarning><body className="antialiased"><AppProviders>{children}</AppProviders></body></html>;
+  return <html data-theme="light" lang={locale} suppressHydrationWarning><body className="antialiased"><AppProviders>{children}</AppProviders></body></html>;
 }

@@ -20,7 +20,7 @@ function applyTheme(theme: AppTheme) {
 }
 
 function getThemeSnapshot(): AppTheme {
-  return window.localStorage.getItem(THEME_STORAGE_KEY) === "light" ? "light" : "dark";
+  return window.localStorage.getItem(THEME_STORAGE_KEY) === "dark" ? "dark" : "light";
 }
 
 function subscribeToTheme(onStoreChange: () => void) {
@@ -42,7 +42,7 @@ interface AppProvidersProps {
 export default function AppProviders({ children }: AppProvidersProps) {
   // Keep the server and the first client render identical. The saved preference
   // is read only after hydration, which prevents the header from mismatching.
-  const resolvedTheme = useSyncExternalStore<AppTheme>(subscribeToTheme, getThemeSnapshot, () => "dark");
+  const resolvedTheme = useSyncExternalStore<AppTheme>(subscribeToTheme, getThemeSnapshot, () => "light");
 
   const setTheme = useCallback((theme: AppTheme) => {
     applyTheme(theme);
