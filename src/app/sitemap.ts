@@ -10,5 +10,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/${locale}/so-sanh`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
     { url: `${siteUrl}/${locale}/huong-dan`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.7 },
     { url: `${siteUrl}/${locale}/da-luu`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.4 },
+    { url: `${siteUrl}/${locale}/ban-do-ai`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
+    { url: `${siteUrl}/${locale}/prompt-studio`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
+    { url: `${siteUrl}/${locale}/lo-trinh`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
+    { url: `${siteUrl}/${locale}/my-toolkit`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.5 },
   ]);
 }
