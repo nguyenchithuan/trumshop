@@ -115,6 +115,11 @@ export default function ProductCatalog({ language, onDetails, onSelect }: Produc
       <p>{language === "vi" ? "Khám phá các gói AI, sáng tạo và tiện ích số. ChatGPT và Gemini luôn được ưu tiên để bạn dễ tìm thấy nhất." : "Explore AI, creative and digital tools. ChatGPT and Gemini stay front and center for faster discovery."}</p>
       <div className="catalog-highlight-chips"><span>✦ ChatGPT</span><span>✦ Gemini</span><span>◉ Kling AI</span><span>✂ CapCut Pro</span></div>
     </div>
+    <nav className="catalog-explore-shortcuts" aria-label={language === "vi" ? "Khám phá thêm" : "Explore more"}>
+      <a href={`/${language}/so-sanh`}><span>↔</span><div><strong>{language === "vi" ? "So sánh công cụ" : "Compare tools"}</strong><small>{language === "vi" ? "Đặt các lựa chọn cạnh nhau" : "See choices side by side"}</small></div><b>→</b></a>
+      <a href={`/${language}/bo-suu-tap`}><span>✦</span><div><strong>{language === "vi" ? "Chọn theo nhu cầu" : "Choose by goal"}</strong><small>{language === "vi" ? "Bộ công cụ cho từng việc" : "Toolsets for each goal"}</small></div><b>→</b></a>
+      <a href={`/${language}/huong-dan`}><span>?</span><div><strong>{language === "vi" ? "Xem hướng dẫn" : "Read guides"}</strong><small>{language === "vi" ? "Bắt đầu dùng tự tin hơn" : "Start with confidence"}</small></div><b>→</b></a>
+    </nav>
 
     <div className="catalog-controls" aria-label={language === "vi" ? "Tìm và lọc sản phẩm" : "Search and filter products"}>
       <div className="catalog-search-area">
@@ -131,7 +136,7 @@ export default function ProductCatalog({ language, onDetails, onSelect }: Produc
           <span className="filter-icon" aria-hidden="true">≡</span>
           <span>{language === "vi" ? "Filter" : "Filter"}</span>
           {selectedFilters.length > 0 && <b>{selectedFilters.length}</b>}
-          <i aria-hidden="true">⌄</i>
+          <i aria-hidden="true" />
         </button>
         {isFilterOpen && <div className="catalog-filter-popover" id="catalog-filter-panel" role="dialog" aria-label={language === "vi" ? "Chọn bộ lọc" : "Choose filters"}>
           <div className="catalog-filter-popover-heading"><div><strong>{language === "vi" ? "Chọn danh mục" : "Choose categories"}</strong><span>{language === "vi" ? "Có thể chọn nhiều mục" : "Select one or more"}</span></div>{selectedFilters.length > 0 && <button type="button" onClick={() => { setSelectedFilters([]); updateUrl([]); }}>{language === "vi" ? "Xóa chọn" : "Clear"}</button>}</div>

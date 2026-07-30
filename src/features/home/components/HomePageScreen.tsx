@@ -111,7 +111,7 @@ export default function HomePageScreen({ initialLanguage }: HomePageScreenProps)
     <WarrantySection content={content} openItem={openPolicy} onToggle={(index) => setOpenPolicy(openPolicy === index ? -1 : index)} />
     <FaqSection content={content} openItem={openFaq} onToggle={(index) => setOpenFaq(openFaq === index ? -1 : index)} />
     <ContactSection contacts={CONTACTS} content={content} language={language} supportHours={supportHours} onAdvice={openAdvice} />
-    <SiteFooter catalogHref={catalogHref} content={content} homeHref={homeHref} /><FloatingContactActions activeSection={activeSection} content={content} scrolled={scrolled} onAdvice={openAdvice} onZalo={() => window.location.assign(CONTACT_LINKS.zalo)} />
+    <SiteFooter catalogHref={catalogHref} content={content} homeHref={homeHref} language={language} /><FloatingContactActions activeSection={activeSection} content={content} scrolled={scrolled} onAdvice={openAdvice} onZalo={() => window.location.assign(CONTACT_LINKS.zalo)} />
     <QuickContactWidget language={language} />
     {modal && <ConsultationModal content={content} message={consultationMessage} onChannel={openChannel} onClose={() => setModal(null)} />}
     <div className={`toast ${toast ? "show" : ""}`} role="status"><span>✓</span>{toast}</div>

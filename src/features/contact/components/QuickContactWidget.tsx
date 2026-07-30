@@ -22,6 +22,11 @@ export default function QuickContactWidget({ language }: QuickContactWidgetProps
   const text = language === "vi"
     ? { title: "Để TrumShop liên hệ lại", lead: "Để lại email hoặc số điện thoại, chúng mình sẽ phản hồi sớm.", label: "Email hoặc số điện thoại", placeholder: "vd. 0901 234 567", submit: "Nhận liên hệ", close: "Đóng form liên hệ", invalid: "Nhập email hoặc số điện thoại hợp lệ nhé.", trigger: "Mở form liên hệ nhanh" }
     : { title: "Let TrumShop contact you", lead: "Leave your email or phone number and we will get back to you soon.", label: "Email or phone number", placeholder: "e.g. name@example.com", submit: "Request contact", close: "Close contact form", invalid: "Please enter a valid email or phone number.", trigger: "Open quick contact form" };
+  const closePopover = () => {
+    setOpen(false);
+    setKeyboardInset(0);
+    setViewportHeight(0);
+  };
 
   useEffect(() => {
     if (!celebrating) return;
@@ -31,7 +36,7 @@ export default function QuickContactWidget({ language }: QuickContactWidgetProps
 
   useEffect(() => {
     if (!open) return;
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") closePopover(); };
     const viewport = window.visualViewport;
     const updateViewport = () => {
       if (!viewport) return;
@@ -54,15 +59,15 @@ export default function QuickContactWidget({ language }: QuickContactWidgetProps
     if (!isEmail && !isPhone) { setError(text.invalid); return; }
     setContact("");
     setError("");
-    setOpen(false);
+    closePopover();
     setCelebrating(true);
   };
 
   const widgetStyle = { "--quick-contact-keyboard-offset": `${keyboardInset}px`, "--quick-contact-viewport-height": `${viewportHeight}px` } as CSSProperties;
 
-  return <div className={`quick-contact-widget ${keyboardInset > 0 ? "is-keyboard-open" : ""}`} style={widgetStyle}>
+  return <div className={`quick-contact-widget ${open && keyboardInset > 0 ? "is-keyboard-open" : ""}`} style={widgetStyle}>
     {open && <form className="quick-contact-popover" onSubmit={submit}>
-      <button className="quick-contact-close" type="button" aria-label={text.close} onClick={() => setOpen(false)}>×</button>
+      <button className="quick-contact-close" type="button" aria-label={text.close} onClick={closePopover}>×</button>
       <span className="quick-contact-mini-icon" aria-hidden="true"><RobotIcon /></span>
       <h2>{text.title}</h2><p>{text.lead}</p>
       <label htmlFor="quick-contact-value">{text.label}</label>

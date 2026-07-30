@@ -86,6 +86,6 @@ export default function ProductAdvisorScreen({ initialLanguage }: ProductAdvisor
         <div className="advisor-next"><span>✦</span><p>{isVietnamese ? "Chọn một sản phẩm để xem quyền lợi, loại gói và cách nhận tư vấn có sẵn tên sản phẩm." : "Choose a product to review benefits, plan types and get product-specific guidance."}</p></div>
       </section>}
     </section>
-    <SiteFooter catalogHref={catalogHref} content={content} homeHref={homeHref} />
+    <SiteFooter catalogHref={catalogHref} content={content} homeHref={homeHref} language={language} />
   </main>;
 }
